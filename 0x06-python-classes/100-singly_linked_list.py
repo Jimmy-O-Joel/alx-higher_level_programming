@@ -1,57 +1,85 @@
 #!/usr/bin/python3
+
+"""Defines a class Node."""
+
+
 class Node:
+    """Node class for a singly linked list"""
+
     def __init__(self, data, next_node=None):
+        """Initializes a Node object.
+        Args:
+            data (int): value to be assigned to the data attribute.
+            next_node (Node): Node to """
         self.data = data
         self.next_node = next_node
 
     @property
     def data(self):
-        return self.__data
+        """Gets the data attribute"""
+        return (self.__data)
 
     @data.setter
     def data(self, value):
-        if not isinstance(value, int):
+        """Set the data attribute"""
+        if isinstance(value, int):
+            self.__data = value
+
+        else:
             raise TypeError("data must be an integer")
-        self.__data = value
 
     @property
     def next_node(self):
-        return self.__next_node
+        """Get the node attribute"""
+        return (self.__next_node)
 
     @next_node.setter
     def next_node(self, value):
-        if not isinstance(value, Node) and value is not None:
+        """Set the node attribute"""
+        if isinstance(value, Node) or value is None:
+            self.__next_node = value
+        else:
             raise TypeError("next_node must be a Node object")
-        self.__next_node = value
 
 
 class SinglyLinkedList:
-    def __str__(self):
-        rtn = ""
-        ptr = self.__head
-
-        while ptr is not None:
-            rtn += str(ptr.data)
-            if ptr.next_node is not None:
-                rtn += "\n"
-            ptr = ptr.next_node
-
-        return rtn
+    """Contains nodes for a singly linked list and methods for ->
+    insertion"""
 
     def __init__(self):
+        """Initialization called when instance of class created"""
         self.__head = None
 
     def sorted_insert(self, value):
-        ptr = self.__head
+        """Inserts a new Node into the correct sorted position
+           (based on data)"""
+        if self.__head is None:
+            self.__head = Node(value)
+            return
 
-        while ptr is not None:
-            if ptr.data > value:
-                break
-            ptr_prev = ptr
-            ptr = ptr.next_node
-
-        newNode = Node(value, ptr)
-        if ptr == self.__head:
-            self.__head = newNode
         else:
-            ptr_prev.next_node = newNode
+            prev = None
+            node = self.__head
+            while node is not None:
+                if node.data > value:
+                    break
+                prev = node
+                node = node.next_node
+            new_node = Node(value)
+            new_node.next_node = node
+            if prev is not None:
+                prev.next_node = new_node
+            if prev is None:
+                self.__head = new_node
+
+    def __str__(self):
+        """Used by print to print linked list"""
+        temp = self.__head
+        string = ""
+        while temp is not None:
+            string += str(temp.data)
+            temp = temp.next_node
+
+            if temp is not None:
+                string += '\n'
+        return (string)
